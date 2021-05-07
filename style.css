@@ -1,0 +1,34 @@
+body {
+    font-family: Verdana, Arial, sans-serif;
+    font-size: smaller;
+    padding: 50px;
+    color: #555;
+    background-color: #eb9f4f
+}
+
+label {
+    text-align: left;
+    letter-spacing: 1px;
+    font-size: 1.1em;
+    color: #540000;
+    font-weight: normal;
+}
+
+#getForm {
+  position: fixed;
+  top: 58px;
+  left: 450px;
+}
+
+#bookList{
+    position: fixed;
+    top: 120px;
+    left: 450px;
+}
+
+#listLabel{
+    position: fixed;
+    top: 117px;
+    left: 450px;
+}
+

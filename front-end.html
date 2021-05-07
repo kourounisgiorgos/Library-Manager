@@ -1,0 +1,114 @@
+<html>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	 <head> 
+	 	<title> My Front End </title>
+	 </head>
+
+	 <body>
+
+	 	<form id='submitForm'>
+	 		<label>Author Name</label><br>
+	 		<input type ="text" name="author" id="author" placeholder="Insert author's name..."></input> <br>
+	 		<label>Book Name</label><br>
+	 		<input type ="text" name="book_name" id="book_name" placeholder="Insert book's name..."></input> <br>
+	 		<label>Book Price in USD</label><br>
+	 		<input type ="number" name="book_price" id="book_price" placeholder="Insert book's name..."></input><br>
+
+	 		<label>Choose book's genre</label><br>
+	 		<select name="genre" id="genre">
+			  <option value="Science fiction">Science fiction</option>
+			  <option value="Satire">Satire</option>
+			  <option value="Drama">Drama</option>
+			  <option value="Action and Adventure">Action and Adventure</option>
+			  <option value="Romance">Romance</option>
+			  <option value="Mystery">Mystery</option>
+			  <option value="Horror">Horror</option>
+			</select>
+
+			<input type="submit" value="Submit Book">
+	 	</form>
+	 	<em id="successLabel"></em>
+
+	 	<form id='getForm'>
+	 		<label>Search books by name</label><br>
+	 		<input type="text" name="search" id="search" placeholder="Insert a word... "></input><br>
+	 		<input type="submit" value="Search Books"></input>
+	 	</form> <br>
+	 	<em id="listLabel"></em>
+	 	<ul id="bookList"></ul>
+
+	 	<script>
+	 		let form = document.getElementById("submitForm");
+	 		form.addEventListener("submit", (event)=>{
+	 			event.preventDefault();
+
+	 			console.log("Post form submitted");
+
+	 			let author = document.getElementById('author').value;
+	 			let book_name = document.getElementById('book_name').value;
+	 			let book_price = document.getElementById('book_price').value;
+	 			let genre = document.getElementById('genre').value;
+
+	 			let data = new URLSearchParams();
+				data.append('author', author);
+				data.append('title',  book_name);
+				data.append('price',  book_price);
+				data.append('genre',  genre);
+
+				const options = {
+ 				 	method: `POST`,
+  					body: data
+				};
+
+	 			fetch("http://localhost:3000/books",options).then(data => {
+    			if (!data.ok) {
+      				throw data;
+    			}
+    			document.getElementById("successLabel").innerHTML = "Added Item Successfully!";
+    			setTimeout(function(){
+    				document.getElementById("successLabel").innerHTML = "";
+				}, 3000);
+
+	 			});
+	 			form.reset();
+		});
+	 	</script>
+	 	<script>
+	 		let getform = document.getElementById("getForm");
+	 		getform.addEventListener("submit",(event)=>{
+	 			
+	 			event.preventDefault();
+	 			console.log("Get form submitted");
+
+	 			
+
+	 			let searchString = document.getElementById("search").value;
+	 			let url = "http://localhost:3000/books/" + searchString;
+
+	 			fetch(url)
+	 			.then(response => response.json())
+	 			.then(data =>{
+	 				let list = document.getElementById('bookList');
+	 				
+	 				while(list.firstChild ){
+  						list.removeChild(list.firstChild );
+					}
+
+	 				for (var i = 0; i < data.length; i++) {
+				        var item = document.createElement('li');
+
+				        // Set its contents:
+				        item.appendChild(document.createTextNode("Title: " + data[i].title + " Author: " + data[i].author + " Price: " + data[i].price + " Genre: "+ data[i].genre));
+
+				        // Add it to the list:
+				        list.appendChild(item);
+    				}
+    				document.getElementById("listLabel").innerHTML = 'Books Found: ' + data.length;
+	 			});
+	 			
+
+	 			getForm.reset();
+	 		});
+	 	</script>
+	 </body>
+</html>
